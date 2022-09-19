@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="CSS/stylesheet.css">
+    <!--Mobil stuff
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/> -->
+    <link rel="stylesheet" type="text/css" href="CSS/mobileStylesheet.css" media="only screen and (max-device-width: 600px)" />
+</head>
+
+<body onclick="selectActive()">
+
+<!-- /// Ny pass eller brukernavn -->
+    <div id="userSettingsForm" class="modal">
+        <div class="modal-content animate">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('userSettingsForm').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <h2 class="modulHeader">Administrate User</h2>
+            </div>
+
+            <div class="container">
+                <input type="text" id="newUsername" placeholder="New username" name="newUsername">
+                <button id="changeUser" onclick="changeUsername()">Change username</button>
+                <br>
+                <input type="text" id="newEmail" placeholder="New email" name="newEmail">
+                <button  id="changeEmail" onclick="changeEmail()">Change email</button>
+                <br>
+                <input type="password" id="newPassword" placeholder="New password" name="newPassword">
+                <button id="changePass" onclick="changePassword()">Change password</button>
+                <br><br>
+                <div id="userSettingsOutput"></div>
+                <button id="deleteAcc" style="background-color: red" onclick="deleteUser()">Delete account</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="logInForm" class="modal">
+        <div class="modal-content">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('logInForm').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <h2 class="modulHeader">Login</h2>
+            </div>
+
+            <div class="container">
+                <label for="username"><b>Username or email</b></label>
+                <br>
+                <input type="text" id="loggInnUsername" placeholder="username" name="username">
+                <br>
+                <label for="password"><b>Password</b></label>
+                <br>
+                <input type="password" id="loggInnpassword" placeholder="password" name="password">
+                <br>
+                <p id="outputLogIn"></p>
+                <br>
+                <button class="formButtons" onclick="loggInn()">Logg inn</button>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="signUpForm" class="modal">
+        <div class="modal-content">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('signUpForm').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <h2 class="modulHeader">Sign up</h2>
+            </div>
+
+            <div class="container">
+                <label for="email"><b>Email</b></label>
+                <br>
+                <input type="text" id="regEmail" placeholder="Email" name="email">
+                <br>
+                <label for="username"><b>Username</b></label>
+                <br>
+                <input type="text" id="regUsername" placeholder="username" name="username">
+                <br>
+                <label for="password"><b>Password</b></label>
+                <br>
+                <input type="password" id="regpassword" placeholder="password" name="password">
+                <br>
+                <h3 id="outputSignUp"></h3>
+                <br>
+                <button class="formButtons" onclick="register()">Sign up</button>
+
+            </div>
+        </div>
+    </div>
+    <div id="openPres" class="modal">
+        <div class="modal-content">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('openPres').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <h2 class="modulHeader">Open presentation</h2>
+                <div class="tab">
+                <button class="tablinks" onclick="presentationLists(event, 'Private') ">Private</button>
+                        
+                
+                <button class="tablinks" onclick="presentationLists(event, 'Public')">Public</button>
+                </div>
+            </div>
+            <div id="Private" class="tabcontent" style="display:block">
+                <h3 style="text-align: center">Private</h3>
+                <div id="loadedPrivetPresentation" class="container"></div>
+            </div>
+            <div id="Public" class="tabcontent">
+                <h3 style="text-align: center">Public</h3>
+                <div id="loadedPublicPresentation" class="container"></div>
+            </div>
+        </div>
+    </div>
+    <div id="sharePres" class="modal">
+        <div class="modal-content">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('sharePres').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <h2 class="modulHeader">Share presentation</h2>
+            </div>
+                <div id="shareContainer" class="container">
+                <p>Enter username or email of the recipient:</p>
+                <input id="shareWith" placeholder="Username or email">
+                <br>
+                <input type="radio" name="sharetype" value="Private" onclick="shareOption(this.value)" checked="checked"> Privet<br>
+                <input type="radio" name="sharetype" value="Public" onclick="shareOption(this.value)"> Public<br>
+                <br>
+                <button id="buttonShare" onclick="sharePresentation()">Share</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="addImageUrl" class="modal">
+        <div class="modal-content">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('addImageUrl').style.display='none'" class="close" title="Close Modal">&times;</span>
+            </div>
+            <div class="container">
+                <input id="imgUrl" placeholder="image url...">
+                <button id = "addImgLink" onclick="updateImage()">Add</button>
+                <br><br>
+                <label id="labelwindow">Set as background</label>
+                <input id="backgroundCheck" type="checkbox" name="background" value="background"><br>
+                <p id="wrongFileType"></p>
+
+            </div>
+        </div>
+    </div>
+    <div id="addVAUrl" class="modal">
+        <div class="modal-content">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('addVAUrl').style.display='none'" class="close" title="Close Modal">&times;</span>
+            </div>
+            <div class="container">
+                <input id="avUrl" placeholder="Embed link...">
+                <button id = "addEmbedLink" onclick="updateEmbed()">Add</button>
+            </div>
+        </div>
+    </div>
+    <div id="import" class="modal">
+        <div class="modal-content">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('import').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <h2 class="modulHeader">Import:</h2>
+            </div>
+            <div class="container">
+                <input id="file" type="file">
+                <button id="import" onclick="ImportFile()">Import File</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="header"></div>
+
+    <template id="signedIn">
+        <div class="dropdown">
+            <button class="dropbtn">Fil</button>
+            <div class="dropdown-content">
+                <a onclick="window.open(window.location.href)">New presentation</a> 
+                <a onclick="savePresentation()">Save</a>
+                <a onclick=" document.getElementById('openPres').style.display = 'block'">Open</a>
+                <a id="export" onclick="exportFile()">Export File</a>
+                <a id="exportNotes" onclick="exportPresenterNotes()">Export notes</a>
+                <a onclick=" document.getElementById('import').style.display = 'block'">Import</a>
+                <a onclick=" document.getElementById('sharePres').style.display = 'block'">Share</a>
+            </div>
+        </div>
+        <input id="presentationTitle" placeholder="Presentation Title..">
+        <h3 id="user"></h3>
+        <button id="logOutBtn" class="formButtons" onclick="logOut()">Log out</button>
+    </template>
+
+    <template id="notSignedIn">
+            <div class="dropdown">
+            <button class="dropbtn">Fil</button>
+            <div class="dropdown-content">
+                <a id="export" onclick="exportFile()">Export File</a>
+                <a id="exportNotes" onclick="exportPresenterNotes()">Export notes</a>
+                <a onclick=" document.getElementById('import').style.display = 'block'">Import</a>
+            </div>
+        </div>
+        <input id="presentationTitle" placeholder="Presentation Title..">
+        <button id="loginBtn" onclick="document.getElementById('signUpForm').style.display='block'" style="width:auto;">Sign up</button>
+        <button id="signInBtn" onclick="document.getElementById('logInForm').style.display='block'" style="width:auto;">Login</button>
+    </template>
+
+
+    <div class="menu">
+        <div id="textMenu">
+            <h3>Text editing</h3>
+            <button id="butB" onclick="toBold()">B</button>
+            <button id="butI" onclick="toItalic()">I</button>
+            <button id="butAa" onclick="toSmallCaps()">Aa</button>
+
+
+
+            <p>Select font</p>
+            <select onchange="changeFont(this);" id="fontList">
+                <option selected>Arial</option>
+                <option>Georgia</option>
+                <option>Palatino Linotype</option>
+                <option>Book Antiqua</option>
+                <option>Times New Roman</option>
+                <option>Helvetica</option>
+                <option>Arial Black</option>
+                <option>Impact</option>
+                <option>Lucida Sans Unicode</option>
+                <option>Tahoma</option>
+                <option>Verdana</option>
+                <option>Comic sans MS</option>
+                <option>Courier New</option>
+                <option>Lucida Console</option>
+            </select>
+            <input type="color" id="butC" value="#000000" onchange="changeColor(event)">
+
+        </div>
+        <div id="imageMenu">
+            <h3>Image Editing</h3>
+            <button id="addImg" onclick="document.getElementById('addImageUrl').style.display='block'">Add image</button>
+            <br>
+            <p>Scale image</p>
+            <input id="imgSlider" type="range" min="10" max="50" step="1">
+            <br>
+
+            <p>Select filter</p>
+            <select id="filter">
+                <option value="none">None</option>
+                <option value="blur(5px)">Blur</option>
+                <option value="brightness(200%)">Brightness</option>
+                <option value="contrast(200%)">Contrast</option>
+                <option value="drop-shadow(8px 8px 10px gray)">Drop-Shadow</option>
+                <option value="grayscale(100%)">Grayscale</option>
+                <option value="hue-rotate(90deg)">Hue-rotate</option>
+                <option value="invert(100%)">Invert</option>
+                <option value="opacity(30%)">Opacity</option>
+                <option value="saturate(8)">Saturate</option>
+                <option value="sepia(100%)">Sepia</option>
+            </select>
+        </div>
+
+
+        <div id="av">
+            <h3>Video or audio</h3>
+            <p>Add embed link</p>
+            <button id="addAV" onclick="document.getElementById('addVAUrl').style.display='block'">Add link</button>
+            <br>
+        </div>
+
+        <div id="backgroundMenu">
+
+            <h3>Presentation style</h3>
+            <p for="pickcolor">Background color</p>
+            <input type="color" id="pickcolor" value="#fdffff" onchange="updateBackground();" />
+        </div>
+
+        <div id="templatesMenu">
+            <p>Templates</p>
+            <select id="templates" onchange="changeTemplate(parseInt(this.value))">
+                <option value="0">Title</option>
+                <option value="1">Default</option>
+                <option value="2">Image</option>
+                <option value="3">Embed</option>
+            </select>
+
+            <div>
+                <p>Themes</p>
+                <select id="themes" onchange="changeTheme()">
+                    <option value ="none">None</option>
+                    <option value="cute">Cute</option>
+                    <option value= "dark">Dark</option>
+                    <option value ="light">Light</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div id="canvas"></div>
+
+    <div id="footerMenu">
+
+        <button id="toggleNotes" onclick="toggleNotes(event)">Toggle notes</button>
+        <label>Start presentation</label>
+        <button id="fullscreenBtn">Start</button>
+        <label>Presenter Mode</label>
+        <input id="presenterMode" type="checkbox" name="presenterMode" value="presenterMode">
+        <label>Auto</label>
+        <input id="autoCheck" type="checkbox" name="autoCheck" value="autoCheck">
+        <input id="timeInput" type="number" min="0" disabled>
+
+
+    <!--
+    <div id="notesAndFullscreen"></div>
+    <div id="presentationSet"></div> -->
+
+    </div>
+    <div class="footer" id="footer">
+        <div id="preview"></div>
+        <div id="addNewSlide" style="z-index: 0"></div>
+        <a class="prev" onclick="plusSlides(-1)" style="z-index: 2">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)" style="z-index: 2">&#10095;</a>
+    </div>
+
+    <div id="slideNotes" class="footer" style="z-index: -1">
+        <textarea title="notes" id="notes" style="width: 100%; height: 100%" onchange="saveNotes()"></textarea>
+    </div>
+
+    <script>
+        let loggInnUsername = document.getElementById("loggInnUsername");
+        let loggInnpassword = document.getElementById("loggInnpassword");
+        let regUsername = document.getElementById("regUsername");
+        let regPassword = document.getElementById("regpassword");
+        let regEmail = document.getElementById("regEmail");
+        let loginBtn = document.getElementById("loginBtn");
+        let signInBtn = document.getElementById("signInBtn");
+        let outputLogIn1 = document.getElementById("outputLogIn");
+        let outputSignUp1 = document.getElementById("outputSignUp");
+        //Change header template
+        let header = document.getElementById("header");
+        
+//username shown
+        window.onload = async function() {
+            localStorage.removeItem('presentationid');
+            if (localStorage.logindata == null) {
+                setHeaderView("notSignedIn", header);
+            }
+            else {
+                console.log("checking token");
+                let data = {token: JSON.parse(localStorage.getItem("logindata")).token};
+                console.log(data);
+                let response = await sendData('app/users/checkToken/', data);
+                console.log(response.status);
+                if(response.status === "OK"){
+                    console.log("token ok");
+                    setHeaderView("signedIn", header);
+                    let user = document.getElementById("user");
+                    let username = JSON.parse(localStorage.getItem("logindata")).username;
+                    user.innerHTML = username;
+                    user.onclick = function(){
+                        document.getElementById('userSettingsForm').style.display = 'block'
+                    };
+                    getAllPresentaionToUser();
+                    getAllPublicPresentation()
+                }
+                else{
+                    console.log("clearing");
+                    logOut();
+                    localStorage.clear();
+                    setHeaderView("notSignedIn", header);
+                }
+            }
+        };
+
+        function setHeaderView(id) {
+            header.innerHTML = "";
+            let temp = document.getElementById(id);
+            let clone = temp.content.cloneNode(true);
+            header.appendChild(clone);
+        }
+        // Get the modal
+        let logInForm = document.getElementById('logInForm');
+        let signUpForm = document.getElementById('signUpForm');
+        let openPres = document.getElementById('openPres');
+        let addImgUrl = document.getElementById('addImageUrl');
+        let addVAUrl = document.getElementById('addVAUrl');
+        let importer = document.getElementById('import');
+        let sharePres = document.getElementById('sharePres');
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == logInForm) {
+                logInForm.style.display = "none";
+            }
+            if (event.target == signUpForm) {
+                signUpForm.style.display = "none";
+            }
+            if (event.target == openPres) {
+                openPres.style.display = "none";
+            }
+            if (event.target == addImgUrl) {
+                addImgUrl.style.display = "none";
+            }
+            if (event.target == addVAUrl) {
+                addVAUrl.style.display = "none";
+            }
+            if (event.target == importer) {
+                importer.style.display = "none";
+            }
+            if (event.target == sharePres) {
+                sharePres.style.display = "none";
+            }
+        }
+
+        function presentationLists(evt, tabName) {
+            var i, tabcontent;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            document.getElementById(tabName).style.display = "block";
+        
+        }
+    </script>
+    <script src="js/file.js"></script>
+    <script src="js/editingTools.js"></script>
+    <script src="js/javascript.js"></script>
+    <script src="js/slides.js"></script>
+
+
+
+
+</body>
+
+</html>
