@@ -190,7 +190,7 @@ Expected response (if successful)
 
 
 ## Maintainers
-Magnus Nordby
-Alexandra Regina Fjelstrup
-Ina F. Pedersen
+Magnus Nordby,
+Alexandra Regina Fjelstrup,
+Ina F. Pedersen,
 Henrik Vedal
